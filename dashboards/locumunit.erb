@@ -1,18 +1,18 @@
 <script type='text/javascript'>
 $(function() {
-Dashing.gridsterLayout('[{"col":1,"row":1,"size_x":2,"size_y":1},{"col":1,"row":2,"size_x":1,"size_y":1},{"col":3,"row":1,"size_x":1,"size_y":1},{"col":2,"row":2,"size_x":1,"size_y":1},{"col":3,"row":2,"size_x":1,"size_y":1},{"col":4,"row":1,"size_x":1,"size_y":2}]')
+Dashing.gridsterLayout('[{"col":1,"row":1,"size_x":2,"size_y":1},{"col":1,"row":2,"size_x":1,"size_y":1},{"col":3,"row":1,"size_x":1,"size_y":1},{"col":2,"row":2,"size_x":1,"size_y":1},{"col":3,"row":2,"size_x":1,"size_y":1},{"col":2,"row":3,"size_x":1,"size_y":1},{"col":3,"row":3,"size_x":1,"size_y":1},{"col":1,"row":3,"size_x":1,"size_y":1}]')
 });
 </script>
 <div class="gridster">
   <ul>
 	<li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
-		<div data-id="clock" data-view="Clock"></div>
+		<div data-id="clinic_details" data-title="Clinic Details" data-view="Clinicdetail"></div>
     </li>  
     <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
 		<div data-id="total_leads" data-view="Status" data-title="Leads Generated"></div>
     </li>
 	<li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-		<div data-id="target" data-view="Meter" data-title="Targets" data-min="0" data-max="180"></div>
+		<div data-id="target" data-view="Meter" data-title="Target" data-min="0" data-max="100"></div>
   	</li>
 	<li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
 		<div data-id="cc1" data-view="Status" data-title="CC1"></div>
@@ -20,8 +20,17 @@ Dashing.gridsterLayout('[{"col":1,"row":1,"size_x":2,"size_y":1},{"col":1,"row":
 	<li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
 		<div data-id="cc2" data-view="Status" data-title="CC2"></div>
     </li>
-	<li data-row="1" data-col="1" data-sizex="1" data-sizey="2">
+	<li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+		<div data-id="taxis_booked" data-view="Status" data-title="Taxis Booked"></div>
+    </li>
+	<li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+		<div data-id="home_visits" data-view="Status" data-title="Home Visits"></div>
+    </li>
+	<li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
+		<div data-id="letters_dispatched" data-view="Status" data-title="Letters Dispatched"></div>
+    </li>
+	<!--<li data-row="1" data-col="1" data-sizex="1" data-sizey="2">
 		<div data-id="top_agents" data-view="List" data-unordered="true" data-title="Top Performers" data-moreinfo=""></div>
-  	</li>
+	</li>-->
   </ul>
 </div>
