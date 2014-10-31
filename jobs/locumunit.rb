@@ -23,13 +23,13 @@ SCHEDULER.every '2m', :first_in => 0 do |job|
 	s.default_sheet = 'Management MI'
 
 	send_event('clinic_details', { cliniclocation:s.cell('C',2), clinicdate:s.cell('C',3) })
-	send_event('target', { value:s.cell('C',10), max:s.cell('C',4) })
+	send_event('target', { value:s.cell('C',10), max:s.cell('C',4), title:"Target #{s.cell('C',4).to_i}" })
 	send_event('cc1', { value:s.cell('C',8) })
 	send_event('cc2', { value:s.cell('C',9) })
 	send_event('total_leads', { value:s.cell('C',10) })
-	send_event('taxis_booked', { value:s.cell('F',9) })
-	send_event('home_visits', { value:s.cell('I',9) })
-	send_event('letters_dispatched', { value:s.cell('C',15) })
+	send_event('taxis_booked', { value:s.cell('F',10) })
+	send_event('home_visits', { value:s.cell('I',10) })
+	send_event('letters_dispatched', { value:s.cell('C',16) })
 	
 	#top_agents = Hash.new
 	
