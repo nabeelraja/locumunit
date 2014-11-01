@@ -23,7 +23,7 @@ SCHEDULER.every '2m', :first_in => 0 do |job|
 	s.default_sheet = 'Management MI'
 
 	send_event('clinic_details', { cliniclocation:s.cell('C',2), clinicdate:s.cell('C',3) })
-	send_event('target', { value:s.cell('C',10), max:s.cell('C',4), title:"Target #{s.cell('C',4).to_i}" })
+	send_event('target', { value:s.cell('C',10), max:s.cell('C',4), title:"Clinic Target #{s.cell('C',4).to_i}" })
 	send_event('cc1', { value:s.cell('C',8) })
 	send_event('cc2', { value:s.cell('C',9) })
 	send_event('total_leads', { value:s.cell('C',10) })
@@ -31,13 +31,13 @@ SCHEDULER.every '2m', :first_in => 0 do |job|
 	send_event('home_visits', { value:s.cell('I',10) })
 	send_event('letters_dispatched', { value:s.cell('C',16) })
 	
-	#top_agents = Hash.new
+	#Populate the agent stats
+	agent_stats = Hash.new
 	
-	#for i in 1..10
-	#	top_agents[s.cell('D',i,'Pivot Table 12')] = { label: s.cell('D',i,'Pivot Table 12'), value: s.cell('E',i,'Pivot Table 12').to_i }
-   	#	#puts s.cell('D',i,'Pivot Table 12')
-	#end
-	#send_event('top_agents', { items: top_agents.values })
-	#top_agents.each_value {|value| puts value}
+	for i in 2..s.last_row('Agents MI').to_i - 1
+		agent_stats[s.cell('A',i,'Agents MI')] = { label: s.cell('A',i,'Agents MI'), value: s.cell('B',i,'Agents MI').to_i }
+	end
+	send_event('agent_stats', { items: agent_stats.values })
+	#agent_stats.each_value {|value| puts value}
 	
 end
