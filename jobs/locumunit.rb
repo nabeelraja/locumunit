@@ -17,7 +17,7 @@ require 'google_drive'
 
 # set up a client instance
 client = Google::APIClient.new(
-  :application_name => 'Example Ruby application',
+  :application_name => 'Locumunit Dashboard',
   :application_version => '1.0'
   )
   
@@ -40,13 +40,16 @@ session = GoogleDrive.login_with_oauth(access_token)
 mws = session.spreadsheet_by_key(GOOGLE_SHEET_KEY).worksheet_by_title('Management MI')
 
 # get the agents mi sheet
-aws = session.spreadsheet_by_key(GOOGLE_SHEET_KEY).worksheet_by_title('Agents MI')
+aws = session.spreadsheet_by_key("1_gqwTaCkiNi0O0jFEyIJfcB2W4FhZ5oFUlpHjVUc8sc").worksheet_by_title('Agents MI')
 
 # scheduler to fetch the data from the google spreadsheet
 SCHEDULER.every '2m', :first_in => 0 do |job|
 # :first_in sets how long it takes before the job is first run. In this case, it is run immediately
 	
-	# Reloads the worksheets to get the changes/updated values
+	# refresh token
+	client.authorization.fetch_access_token!
+	
+	# reloads the worksheets to get the changes/updated values
 	mws.reload()
 	aws.reload()
 	
@@ -64,10 +67,9 @@ SCHEDULER.every '2m', :first_in => 0 do |job|
 	agent_stats = Hash.new
 	
 	for i in 2..aws.num_rows().to_i - 1
-		agent_stats[aws.cell[i,1]] = { label: aws.cell[i,1], value: (aws.cell[i,2]).to_i }
+		agent_stats[aws[i,1]] = { label: aws[i,1], value: (aws[i,2]).to_i }
 	end
 	
 	send_event('agent_stats', { items: agent_stats.values })
-	
-	
+
 end
