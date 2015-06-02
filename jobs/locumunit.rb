@@ -7,10 +7,10 @@ E-mail: <nabeel.raja@outlook.com>
 =end
 
 # Constants
-SERVICE_ACCOUNT_EMAIL_ADDRESS = '883449734681-ksqn5mmeijhcvq79elsmc318oae6ihun@developer.gserviceaccount.com'
-PATH_TO_KEY_FILE              = 'client.p12'
-SECRET                        = 'notasecret'
-GOOGLE_SHEET_KEY			  = '1_gqwTaCkiNi0O0jFEyIJfcB2W4FhZ5oFUlpHjVUc8sc'
+SERVICE_ACCOUNT_EMAIL_ADDRESS = '883449734681-ksqn5mmeijhcvq79elsmc318oae6ihun@developer.gserviceaccount.com' # Email of service account
+KEY_FILE              = 'client.p12' # File containing your private key
+SECRET                        = 'notasecret' # Password to unlock private key
+GOOGLE_SHEET_KEY			  = '1_gqwTaCkiNi0O0jFEyIJfcB2W4FhZ5oFUlpHjVUc8sc' # Google spreadsheet Key
 
 require "google/api_client"
 require 'google_drive'
@@ -20,34 +20,40 @@ client = Google::APIClient.new(
   :application_name => 'Locumunit Dashboard',
   :application_version => '1.0'
   )
-  
+
+# initialize the sign-in key
+key = Google::APIClient::PKCS12.load_key(KEY_FILE, SECRET)
+
 # initialize the client instance to get the service
 client.authorization = Signet::OAuth2::Client.new(
   :token_credential_uri => 'https://accounts.google.com/o/oauth2/token',
   :audience             => 'https://accounts.google.com/o/oauth2/token',
   :scope                => 'https://www.googleapis.com/auth/drive',
   :issuer               => SERVICE_ACCOUNT_EMAIL_ADDRESS,
-  :signing_key          => Google::APIClient::PKCS12.load_key(PATH_TO_KEY_FILE, SECRET)
-  ).tap { |auth| auth.fetch_access_token! }
-
-# get the access token
-access_token = client.authorization.access_token
-
-# Creates a session.
-session = GoogleDrive.login_with_oauth(access_token)
-
-# get the manangemnt mi sheet
-mws = session.spreadsheet_by_key(GOOGLE_SHEET_KEY).worksheet_by_title('Management MI')
-
-# get the agents mi sheet
-aws = session.spreadsheet_by_key("1_gqwTaCkiNi0O0jFEyIJfcB2W4FhZ5oFUlpHjVUc8sc").worksheet_by_title('Agents MI')
+  :signing_key          => key)
 
 # scheduler to fetch the data from the google spreadsheet
 SCHEDULER.every '2m', :first_in => 0 do |job|
 # :first_in sets how long it takes before the job is first run. In this case, it is run immediately
 	
-	# refresh token
+	# request a token for our service account
 	client.authorization.fetch_access_token!
+	
+	# get the access token
+	access_token = client.authorization.access_token
+	
+	# code to print access token & expiration time 
+	#p access_token
+	#p client.authorization.expires_in
+	
+	# Creates a session.
+	session = GoogleDrive.login_with_oauth(access_token)
+	
+	# get the manangemnt mi sheet
+	mws = session.spreadsheet_by_key(GOOGLE_SHEET_KEY).worksheet_by_title('Management MI')
+	
+	# get the agents mi sheet
+	aws = session.spreadsheet_by_key("1_gqwTaCkiNi0O0jFEyIJfcB2W4FhZ5oFUlpHjVUc8sc").worksheet_by_title('Agents MI')
 	
 	# reloads the worksheets to get the changes/updated values
 	mws.reload()
