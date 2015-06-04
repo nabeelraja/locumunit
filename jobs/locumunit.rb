@@ -53,7 +53,7 @@ SCHEDULER.every '2m', :first_in => 0 do |job|
 	mws = session.spreadsheet_by_key(GOOGLE_SHEET_KEY).worksheet_by_title('Management MI')
 	
 	# get the agents mi sheet
-	aws = session.spreadsheet_by_key("1_gqwTaCkiNi0O0jFEyIJfcB2W4FhZ5oFUlpHjVUc8sc").worksheet_by_title('Agents MI')
+	aws = session.spreadsheet_by_key(GOOGLE_SHEET_KEY).worksheet_by_title('Agents MI')
 	
 	# reloads the worksheets to get the changes/updated values
 	mws.reload()
